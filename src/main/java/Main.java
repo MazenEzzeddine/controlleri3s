@@ -38,14 +38,14 @@ public class Main {
             log.info("******************************************");
             log.info("******************************************");
 
-            scaleLogic(ar );
+            scaleLogic(ar);
             Thread.sleep(5000);
         }
     }
 
     private static void scaleLogic(double ar) {
 
-       double  neededReplicas = Math.ceil(ar/(currentReplicas*90));
+       double  neededReplicas = Math.ceil(ar/(90));
 
        if(neededReplicas != currentReplicas) {
            try (final KubernetesClient k8s = new DefaultKubernetesClient()) {
