@@ -12,50 +12,36 @@ import java.util.concurrent.ExecutionException;
 public class Main {
 
     private static final Logger log = LogManager.getLogger(Main.class);
-
-
-    static double  currentReplicas= 1;
+    static BinPack2 bp;
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-
-        System.out.println("Hello");
         initialize();
-
     }
 
 
 
     private static void initialize() throws InterruptedException, ExecutionException {
-
-
+         bp = new BinPack2();
         log.info("Warming 30  seconds.");
         Thread.sleep(30 * 1000);
 
+
+
         while (true) {
             log.info("Querying Prometheus");
-           double ar =   ArrivalRates.arrivalRateTopicGeneral();
+             ArrivalRates.arrivalRateTopicGeneral();
+
+
+            scaleLogic();
             log.info("Sleeping for 5 seconds");
             log.info("******************************************");
             log.info("******************************************");
-
-            scaleLogic(ar);
             Thread.sleep(5000);
         }
     }
 
-    private static void scaleLogic(double ar) {
-
-       double  neededReplicas = Math.ceil(ar/(90));
-
-       if(neededReplicas != currentReplicas) {
-           try (final KubernetesClient k8s = new DefaultKubernetesClient()) {
-               k8s.apps().deployments().inNamespace("default").withName("consumer").scale((int)neededReplicas);
-               log.info("I have Upscaled group {} you should have {}", "testgroup1", currentReplicas);
-               currentReplicas = neededReplicas;
-           }
-       }
-
-
+    private static void scaleLogic() {
+     bp.scaleAsPerBinPack();
 
     }
 }
