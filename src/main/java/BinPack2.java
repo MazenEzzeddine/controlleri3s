@@ -15,8 +15,8 @@ public class BinPack2 {
     private static final Logger log = LogManager.getLogger(BinPack2.class);
     private  int size =1;
    private   Instant LastUpScaleDecision = Instant.now();
-   private   double wsla = 0.5;
-   private   double dynamicAverageMaxConsumptionRate = 180.0;
+   private final double wsla = 0.5;
+   private final double dynamicAverageMaxConsumptionRate = 200.0;
 
 
 

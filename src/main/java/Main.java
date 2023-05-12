@@ -29,9 +29,8 @@ public class Main {
 
         while (true) {
             log.info("Querying Prometheus");
-             ArrivalRates.arrivalRateTopicGeneral();
-
-
+            ArrivalRates.arrivalRateTopicGeneral();
+            ArrivalRates.LagTopicGeneral();
             scaleLogic();
             log.info("Sleeping for 5 seconds");
             log.info("******************************************");
