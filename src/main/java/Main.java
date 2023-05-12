@@ -3,6 +3,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class Main {
 
         while (true) {
             log.info("Querying Prometheus");
+
             ArrivalRates.arrivalRateTopicGeneral();
             ArrivalRates.LagTopicGeneral();
             scaleLogic();
@@ -40,7 +42,11 @@ public class Main {
     }
 
     private static void scaleLogic() {
-     bp.scaleAsPerBinPack();
+        if  (Duration.between(bp.LastUpScaleDecision, Instant.now()).getSeconds() >15){
+            bp.scaleAsPerBinPack();
+        } else {
+            log.info("No scale cooldown");
+        }
 
     }
 }

@@ -14,8 +14,8 @@ public class BinPack2 {
     //TODO give fup and fdown as paramters to the functions.
     private static final Logger log = LogManager.getLogger(BinPack2.class);
     private  int size =1;
-   private   Instant LastUpScaleDecision = Instant.now();
-   private final double wsla = 0.5;
+   public   Instant LastUpScaleDecision = Instant.now();
+   private final double wsla = 1;
    private final double dynamicAverageMaxConsumptionRate = 200.0;
 
 
@@ -60,17 +60,27 @@ public class BinPack2 {
 
 
 
+        for (Partition partition : parts) {
+            if (partition.getLag() > dynamicAverageMaxConsumptionRate*wsla) {
+                log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
+                        " we are truncating its lag", partition.getId(), partition.getLag(), dynamicAverageMaxConsumptionRate*wsla);
+                partition.setLag((long)(dynamicAverageMaxConsumptionRate*wsla));
+            }
+        }
+
+
+
 
 
         //if a certain partition has an arrival rate  higher than R  set its arrival rate  to R
         //that should not happen in a well partionned topic
         for (Partition partition : parts) {
-            if (partition.getArrivalRate() > dynamicAverageMaxConsumptionRate*wsla) {
+            if (partition.getArrivalRate() > dynamicAverageMaxConsumptionRate) {
                 log.info("Since partition {} has arrival rate {} higher than consumer service rate {}" +
                                 " we are truncating its arrival rate", partition.getId(),
                         String.format("%.2f", partition.getArrivalRate()),
-                        String.format("%.2f",dynamicAverageMaxConsumptionRate*wsla));
-                partition.setArrivalRate(dynamicAverageMaxConsumptionRate*wsla);
+                        String.format("%.2f",dynamicAverageMaxConsumptionRate));
+                partition.setArrivalRate(dynamicAverageMaxConsumptionRate);
             }
         }
         //start the bin pack FFD with sort
@@ -80,8 +90,8 @@ public class BinPack2 {
             int j;
             consumers.clear();
             for (int t = 0; t < consumerCount; t++) {
-                consumers.add(new Consumer((String.valueOf(t)), 0L,
-                        dynamicAverageMaxConsumptionRate*wsla));
+                consumers.add(new Consumer((String.valueOf(t)),  (long)(dynamicAverageMaxConsumptionRate*wsla),
+                        dynamicAverageMaxConsumptionRate/**wsla*/));
             }
 
             for (j = 0; j < parts.size(); j++) {
@@ -89,7 +99,7 @@ public class BinPack2 {
                 Collections.sort(consumers);
                 for (i = 0; i < consumerCount; i++) {
 
-                    if (/*consumers.get(i).getRemainingLagCapacity() >= parts.get(j).getLag() &&*/
+                    if (consumers.get(i).getRemainingLagCapacity() >= parts.get(j).getLag() &&
                             consumers.get(i).getRemainingArrivalCapacity() >= parts.get(j).getArrivalRate()) {
                         consumers.get(i).assignPartition(parts.get(j));
                         break;
@@ -104,16 +114,26 @@ public class BinPack2 {
                 break;
         }
         log.info(" The BP up scaler recommended for group {} {}", "testgroup1", consumers.size());
-        return consumers.size();
-    }
 
+   return consumers.size();
+    }
 
     private  int binPackAndScaled() {
         log.info(" shall we down scale group {} ", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
-        double fractiondynamicAverageMaxConsumptionRate = dynamicAverageMaxConsumptionRate * 0.7*wsla;
+        double fractiondynamicAverageMaxConsumptionRate = dynamicAverageMaxConsumptionRate * 0.7/**wsla*/;
+
+
+        for (Partition partition : parts) {
+            if (partition.getLag() > fractiondynamicAverageMaxConsumptionRate*wsla) {
+                log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
+                        " we are truncating its lag", partition.getId(), partition.getLag(), fractiondynamicAverageMaxConsumptionRate*wsla);
+                partition.setLag((long)(fractiondynamicAverageMaxConsumptionRate*wsla));
+            }
+        }
+
 
 
 
@@ -135,7 +155,8 @@ public class BinPack2 {
             int j;
             consumers.clear();
             for (int t = 0; t < consumerCount; t++) {
-                consumers.add(new Consumer((String.valueOf(consumerCount)), 0L,
+                consumers.add(new Consumer((String.valueOf(consumerCount)),
+                        (long)(fractiondynamicAverageMaxConsumptionRate*wsla),
                         fractiondynamicAverageMaxConsumptionRate));
             }
 
@@ -144,7 +165,7 @@ public class BinPack2 {
                 Collections.sort(consumers);
                 for (i = 0; i < consumerCount; i++) {
 
-                    if (/*consumers.get(i).getRemainingLagCapacity() >= parts.get(j).getLag() &&*/
+                    if (consumers.get(i).getRemainingLagCapacity() >= parts.get(j).getLag() &&
                             consumers.get(i).getRemainingArrivalCapacity() >= parts.get(j).getArrivalRate()) {
                         consumers.get(i).assignPartition(parts.get(j));
                         break;
