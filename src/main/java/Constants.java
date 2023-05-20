@@ -6,7 +6,7 @@ public class Constants {
    static List<String> getQueriesArrival(String topicName) {
        List<String> queries = new ArrayList<>();
          String topic1ar = "http://prometheus-operated:9090/api/v1/query?" +
-                "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22"+ topicName+ "%22,namespace=%22default%22%7D%5B1m%5D))%20by%20(topic)";
+                "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22"+ topicName+ "%22,namespace=%22default%22%7D%5B20s%5D))%20by%20(topic)";
          String topic1p0 = "http://prometheus-operated:9090/api/v1/query?" +
                 "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22"+ topicName+ "%22,partition=%220%22,namespace=%22default%22%7D%5B20s%5D))";
          String topic1p1 = "http://prometheus-operated:9090/api/v1/query?" +

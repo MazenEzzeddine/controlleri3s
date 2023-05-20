@@ -18,14 +18,10 @@ public class ArrivalProducer {
 
         ArrivalServiceGrpc.ArrivalServiceBlockingStub  arrivalServiceBlockingStub =
                 ArrivalServiceGrpc.newBlockingStub(managedChannel);
-
         ArrivalRequest request = ArrivalRequest.newBuilder().setArrivalrequest("Give me the Assignment plz").build();
-
         ArrivalResponse reply = arrivalServiceBlockingStub.consumptionRate(request);
-
         log.info("Arrival from the producer is {}", reply);
-
-
+        managedChannel.shutdown();
     }
 
 
