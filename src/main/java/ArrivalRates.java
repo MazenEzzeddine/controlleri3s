@@ -89,7 +89,7 @@ public class ArrivalRates {
     static double LagTopicGeneral() {
 
         //List<String> arrivalqueries = Constants.getQueriesLag("testtopic1", "testgroup1");//getQueriesLagAvg("testtopic1", "testgroup1");
-        List<String> arrivalqueries = Constants.getQueriesLagAvg("testtopic1", "testgroup1");
+        List<String> arrivalqueries = Constants.getQueriesLag("testtopic1", "testgroup1");//getQueriesLagAvg("testtopic1", "testgroup1");
 
 
         HttpClient client = HttpClient.newHttpClient();

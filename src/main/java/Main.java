@@ -26,14 +26,18 @@ public class Main {
         log.info("Warming 30  seconds.");
         Thread.sleep(30 * 1000);
 
+/*        log.info("Warming 3  minutes.");
+        Thread.sleep(180 * 1000);*/
+
 
 
         while (true) {
             log.info("Querying Prometheus");
 
             ArrivalRates.arrivalRateTopicGeneral();
-            ArrivalRates.LagTopicGeneral();
-            scaleLogic();
+           // ArrivalRates.LagTopicGeneral();
+           ArrivalProducer.callForArrivals();
+            //scaleLogic();
             log.info("Sleeping for 5 seconds");
             log.info("******************************************");
             log.info("******************************************");
@@ -42,7 +46,7 @@ public class Main {
     }
 
     private static void scaleLogic() {
-        if  (Duration.between(bp.LastUpScaleDecision, Instant.now()).getSeconds() >15){
+        if  (Duration.between(bp.LastUpScaleDecision, Instant.now()).getSeconds() >10){
             bp.scaleAsPerBinPack();
         } else {
             log.info("No scale cooldown");
