@@ -1,4 +1,5 @@
 
+/*
 
 
 syntax= "proto3";
@@ -7,23 +8,9 @@ option java_multiple_files=true;
 
 
 
-service ArrivalService{
-  rpc consumptionRate (ArrivalRequest) returns (ArrivalResponse) {};
+service RateService{
   rpc consumptionRatee (RateRequest) returns (RateResponse) {};
-
 }
-
-message ArrivalResponse {
-  float arrival = 1;
-}
-
-message ArrivalRequest {
-  string arrivalrequest = 1;
-}
-
-
-
-
 
 message RateResponse {
   float rate =1;
@@ -32,6 +19,7 @@ message RateResponse {
 message RateRequest {
   string raterequest = 1;
 }
+*/
 
 
 

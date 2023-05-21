@@ -22,7 +22,24 @@ public class ArrivalProducer {
         ArrivalResponse reply = arrivalServiceBlockingStub.consumptionRate(request);
         log.info("Arrival from the producer is {}", reply);
         managedChannel.shutdown();
+
     }
+
+
+    public static void callForConsumers() {
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("rateservice", 5002)
+                .usePlaintext()
+                .build();
+
+        ArrivalServiceGrpc.ArrivalServiceBlockingStub rateServiceBlockingStub
+                 =  ArrivalServiceGrpc.newBlockingStub(managedChannel);
+        RateRequest request = RateRequest.newBuilder().setRaterequest("Give me the Assignment plz").build();
+        RateResponse reply = rateServiceBlockingStub.consumptionRatee(request);
+        log.info("latency is {}", reply);
+        managedChannel.shutdown();
+
+    }
+
 
 
 
