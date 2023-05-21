@@ -16,7 +16,7 @@ public class BinPack2 {
     private  int size =1;
    public   Instant LastUpScaleDecision = Instant.now();
    private final double wsla = 0.5;
-   private final double dynamicAverageMaxConsumptionRate = 200.0;
+
 
 
 
