@@ -34,10 +34,10 @@ public class Main {
         while (true) {
             log.info("Querying Prometheus");
 
-            ArrivalRates.arrivalRateTopicGeneral();
+           ArrivalRates.arrivalRateTopicGeneral();
            // ArrivalRates.LagTopicGeneral();
-           //ArrivalProducer.callForArrivals();
-            //ArrivalProducer.callForConsumers();
+        /*   ArrivalProducer.callForArrivals();
+            ArrivalProducer.callForConsumers();*/
 
             scaleLogic();
             log.info("Sleeping for 5 seconds");

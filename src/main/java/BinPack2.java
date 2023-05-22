@@ -15,6 +15,8 @@ public class BinPack2 {
     private static final Logger log = LogManager.getLogger(BinPack2.class);
     private  int size =1;
    public   Instant LastUpScaleDecision = Instant.now();
+
+   //0.5 WSLA is reached around 85 events/sec
    private final double wsla = 0.5;
 
 
