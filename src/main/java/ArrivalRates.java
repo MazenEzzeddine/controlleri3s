@@ -133,7 +133,7 @@ public class ArrivalRates {
             partition2++;
         }
         //topicpartitions.setTotalArrivalRate(totalarrivalstopic2);
-        log.info("rotal average lag  for  topic  {} {}",
+        log.info("total average lag  for  topic  {} {}",
                 "testtopic1", totalarrivalstopic2);
 
 

@@ -23,8 +23,8 @@ public class Main {
 
     private static void initialize() throws InterruptedException, ExecutionException {
          bp = new BinPack2();
-        log.info("Warming 30  seconds.");
-        Thread.sleep(30 * 1000);
+        log.info("Warming 15  seconds.");
+        Thread.sleep(15 * 1000);
 
 /*        log.info("Warming 3  minutes.");
         Thread.sleep(180 * 1000);*/
@@ -34,16 +34,16 @@ public class Main {
         while (true) {
             log.info("Querying Prometheus");
 
-           ArrivalRates.arrivalRateTopicGeneral();
-           // ArrivalRates.LagTopicGeneral();
-        /*   ArrivalProducer.callForArrivals();
+            ArrivalRates.arrivalRateTopicGeneral();
+            ArrivalRates.LagTopicGeneral();
+/*           ArrivalProducer.callForArrivals();
             ArrivalProducer.callForConsumers();*/
 
             scaleLogic();
             log.info("Sleeping for 5 seconds");
             log.info("******************************************");
             log.info("******************************************");
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         }
     }
 
